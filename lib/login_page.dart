@@ -9,6 +9,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String errorMessage = '🤔';
   bool _isValid;
   GlobalKey<FormState> _loginFormKey;
   TextEditingController _emailTextController;
@@ -64,19 +65,22 @@ class _LoginPageState extends State<LoginPage> {
                           .signInWithEmailAndPassword(
                               email: _emailTextController.text,
                               password: _passwordTextController.text)
-                          .whenComplete(
-                            () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()),
-                            ),
-                          );
+                          .then((u) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      });
                     } on FirebaseAuthException catch (e) {
+                      setState(() {
+                        errorMessage = e.message;
+                      });
                       print(e.code);
                       print(e.message);
                     }
                 },
               ),
+              Text(errorMessage),
             ],
           ),
         ),
