@@ -1,2 +1,2 @@
 # flutterfire2
-reproducing for failed to catch flutterfire FirebaseAuth exception.
+catch flutterfire FirebaseAuth exception example.
