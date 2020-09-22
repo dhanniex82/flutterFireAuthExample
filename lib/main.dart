@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'login_page.dart';
+import './pages/home_page.dart';
+import './pages/login_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,6 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Fire Auth',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -25,7 +29,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
       body: FutureBuilder(
           future: Firebase.initializeApp(),
           builder: (context, snapshot) {
@@ -33,7 +36,9 @@ class App extends StatelessWidget {
               return Text('something wrong');
             }
             if (snapshot.connectionState == ConnectionState.done) {
-              return LoginPage();
+              return FirebaseAuth.instance.currentUser == null
+                  ? LoginPage()
+                  : HomePage();
             }
             return Text('loading...');
           }),
